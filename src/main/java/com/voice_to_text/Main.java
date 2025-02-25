@@ -13,6 +13,7 @@ public class Main extends Application {
     private boolean isRecording = false;
     private AudioRecorder audioRecorder;
     private SpeechToText speechToText;
+    private TextFieldInteractor textFieldInteractor;
 
     @Override
     public void start(Stage primaryStage) {
@@ -29,15 +30,19 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        // Initialize SpeechToText and AudioRecorder
-        String modelPath = "C:\\_Programming_Stuff\\_desktopApps\\voice-to-text-app\\vosk-model-small-en-us-0.15"; // Replace with your model path
+        // Initialize SpeechToText, AudioRecorder, and TextFieldInteractor
+        String modelPath = "C:\\_Programming_Stuff\\_desktopApps\\voice-to-text-app\\vosk-model-small-en-us-0.15";
         speechToText = new SpeechToText(modelPath);
         audioRecorder = new AudioRecorder();
+        textFieldInteractor = new TextFieldInteractor();
 
         // Set up the audio data listener
         audioRecorder.setAudioDataListener(audioData -> {
             String transcribedText = speechToText.transcribe(audioData);
-            javafx.application.Platform.runLater(() -> textArea.appendText(transcribedText + "\n"));
+            javafx.application.Platform.runLater(() -> {
+                textArea.appendText(transcribedText + "\n"); // Display in the app's text area
+                textFieldInteractor.typeText(transcribedText); // Type into the active text field
+            });
         });
 
         // Add event handler for the Record button
