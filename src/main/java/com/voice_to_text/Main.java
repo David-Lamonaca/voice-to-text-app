@@ -38,8 +38,9 @@ public class Main extends Application
         audioRecorder = new AudioRecorder();
         textFieldInteractor = new TextFieldInteractor();
 
-        // Detect when window loses focus
+        // Detect when window loses focus, and a certain key is pressed.
         startActiveWindowMonitor();
+        GlobalKeyListener.register(this);
 
         // Audio data listener
         audioRecorder.setAudioDataListener(audioData -> 
@@ -144,6 +145,11 @@ public class Main extends Application
         isRecording = false;
         recordButton.setText("Record");
         audioRecorder.stopRecording();
+    }
+
+    public void resetTypedText()
+    {
+        textFieldInteractor.resetTypedText();
     }
 
     public static void main(String[] args) 

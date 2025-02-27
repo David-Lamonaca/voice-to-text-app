@@ -44,7 +44,12 @@
             <artifactId>jna-platform</artifactId>
             <version>5.12.1</version>
         </dependency>
-</dependencies>
+        <dependency>
+            <groupId>com.github.kwhat</groupId>
+            <artifactId>jnativehook</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

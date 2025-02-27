@@ -99,10 +99,22 @@ public class TextFieldInteractor
                 return;
             }
 
-            if (Character.isUpperCase(c)) robot.keyPress(KeyEvent.VK_SHIFT);
+            if (Character.isUpperCase(c)) 
+            {
+                robot.keyPress(KeyEvent.VK_SHIFT);
+            }
+
             robot.keyPress(keyCode);
             robot.keyRelease(keyCode);
-            if (Character.isUpperCase(c)) robot.keyRelease(KeyEvent.VK_SHIFT);
+            if (Character.isUpperCase(c)) 
+            {
+                robot.keyRelease(KeyEvent.VK_SHIFT);
+            }
+
+            if (c == '\n') 
+            {
+                resetTypedText(); 
+            }
         }
     }
 
