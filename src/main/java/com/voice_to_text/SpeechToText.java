@@ -7,26 +7,63 @@ import org.vosk.LogLevel;
 import org.vosk.Model;
 import org.vosk.Recognizer;
 
-public class SpeechToText {
+import com.google.gson.Gson;
+
+public class SpeechToText 
+{
     private final Model model;
     private final Recognizer recognizer;
+    private final Gson gson;
 
-    public SpeechToText(String modelPath) {
+    public SpeechToText(String modelPath) 
+    {
         LibVosk.setLogLevel(LogLevel.WARNINGS);
-        try {
+        try 
+        {
             model = new Model(modelPath);
             recognizer = new Recognizer(model, 16000);
-        } catch (IOException e) {
+            gson = new Gson();
+        } 
+        catch (IOException e) 
+        {
             throw new RuntimeException("Failed to initialize Vosk model or recognizer", e);
         }
     }
 
-    public String transcribe(byte[] audioData) {
+    /**
+     * Transcribes audio data and returns the recognized text.
+     *
+     * @param audioData The audio data to transcribe.
+     * @return The recognized text, or an empty string if no text is recognized.
+     */
+    public String transcribe(byte[] audioData) 
+    {
         recognizer.acceptWaveForm(audioData, audioData.length);
-        return recognizer.getPartialResult();
+        String result = recognizer.getPartialResult(); 
+
+        VoskResponse response = gson.fromJson(result, VoskResponse.class);
+        String partialText = response.getPartial() != null ? response.getPartial() : "";
+        return partialText;
     }
 
-    public String getFinalResult() {
-        return recognizer.getFinalResult();
+    /**
+     * Resets the recognizer to clear the internal buffer.
+     */
+    public void resetRecognizer() 
+    {
+        recognizer.reset();
+    }
+
+    /**
+     * Returns the final transcription result.
+     *
+     * @return The final recognized text.
+     */
+    public String getFinalResult() 
+    {
+        String result = recognizer.getFinalResult();
+
+        VoskResponse response = gson.fromJson(result, VoskResponse.class);
+        return response.getText() != null ? response.getText() : "";
     }
 }

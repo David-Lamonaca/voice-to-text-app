@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "TextFieldInteractor",
+            "request": "launch",
+            "mainClass": "com.voice_to_text.TextFieldInteractor",
+            "projectName": "voice-to-text-app"
+        },
+        {
+            "type": "java",
+            "name": "Launch Main",
+            "request": "launch",
+            "mainClass": "com.voice_to_text.Main",
+            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-21.0.6/lib\" --add-modules javafx.controls,javafx.fxml"
+        }
+    ]
+}
