@@ -1,15 +1,21 @@
 package com.voice_to_text;
 
+import com.jfoenix.controls.JFXButton;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Main extends Application 
 {
-    private TextArea textArea;
+    private HBox titleBar;
     private Button recordButton;
     private boolean isRecording = false;
     private AudioRecorder audioRecorder;
@@ -17,18 +23,31 @@ public class Main extends Application
     private TextFieldInteractor textFieldInteractor;
     private String lastRecognizedText = "";
 
+    private double xOffset = 0.0;
+    private double yOffset = 0.0;
+
     @Override
     public void start(Stage primaryStage) 
     {
-        primaryStage.setTitle("Real-Time Voice to Text");
+        setupTopbar(primaryStage);
 
-        // UI components
-        textArea = new TextArea();
-        textArea.setEditable(false);
+        // Overall Layout
         recordButton = new Button("Record");
+        VBox layout = new VBox(10, titleBar, recordButton);
+        layout.setStyle
+        (
+            "-fx-background-color: #1e2124; " +
+            "-fx-padding: 10px; " +
+            "-fx-background-radius: 10px; " +
+            "-fx-border-radius: 10px; " +      
+            "-fx-border-color: #333; " +       
+            "-fx-border-width: 2px;"          
+        );
 
-        VBox vbox = new VBox(textArea, recordButton);
-        Scene scene = new Scene(vbox, 400, 300);
+        Scene scene = new Scene(layout, 400, 300);
+        scene.setFill(Color.TRANSPARENT);
+
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -50,8 +69,6 @@ public class Main extends Application
             {
                 javafx.application.Platform.runLater(() -> 
                 {
-                    textArea.appendText(transcribedText + "\n");
-
                     try 
                     {
                         Thread.sleep(500);
@@ -150,6 +167,63 @@ public class Main extends Application
     public void resetTypedText()
     {
         textFieldInteractor.resetTypedText();
+    }
+
+    private void setupTopbar(Stage primaryStage)
+    {
+        // Home Icon
+        ImageView homeIcon = new ImageView(new Image(getClass().getResource("/icons/home.png").toExternalForm()));
+        homeIcon.setFitWidth(30);
+        homeIcon.setFitHeight(30);
+        JFXButton homeButton = new JFXButton("", homeIcon);
+        homeButton.setOnAction(e -> loadMainApp());
+
+        // Settings Icon
+        ImageView settingsIcon = new ImageView(new Image(getClass().getResource("/icons/settings.png").toExternalForm()));
+        settingsIcon.setFitWidth(30);
+        settingsIcon.setFitHeight(30);
+        JFXButton settingsButton = new JFXButton("", settingsIcon);
+        settingsButton.setOnAction(e -> loadSettingsPage());
+
+        // Minimize Icon
+        ImageView minimizeIcon = new ImageView(new Image(getClass().getResource("/icons/minimize.png").toExternalForm()));
+        minimizeIcon.setFitWidth(30);
+        minimizeIcon.setFitHeight(30);
+        JFXButton minimizeButton = new JFXButton("", minimizeIcon);
+        minimizeButton.setOnAction(e -> primaryStage.setIconified(true));
+
+        // Close Icon
+        ImageView closeIcon = new ImageView(new Image(getClass().getResource("/icons/close.png").toExternalForm()));
+        closeIcon.setFitWidth(30);
+        closeIcon.setFitHeight(30);
+        JFXButton closeButton = new JFXButton("", closeIcon);
+        closeButton.setOnAction(e -> System.exit(0));
+
+        // Title Bar
+        HBox topLeft = new HBox(5, homeButton, settingsButton);
+        HBox topRight = new HBox(5, minimizeButton, closeButton);
+        titleBar = new HBox(195, topLeft, topRight);
+
+        // Enable dragging
+        titleBar.setOnMousePressed(event -> 
+        {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        titleBar.setOnMouseDragged(event -> 
+        {
+            primaryStage.setX(event.getScreenX() - xOffset);
+            primaryStage.setY(event.getScreenY() - yOffset);
+        });  
+    }
+
+    private void loadMainApp() {
+        System.out.println("Main App Loaded");
+    }
+
+    private void loadSettingsPage() {
+        System.out.println("Settings Page Loaded");
     }
 
     public static void main(String[] args) 
