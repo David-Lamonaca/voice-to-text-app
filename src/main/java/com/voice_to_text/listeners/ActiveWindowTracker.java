@@ -1,4 +1,4 @@
-package com.voice_to_text;
+package com.voice_to_text.listeners;
 
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;

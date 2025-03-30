@@ -1,0 +1,207 @@
+.scroll-pane,
+.scroll-pane:focused
+{
+    background: #1e2124;
+    border-color: #1e2124;
+    background-color: transparent;
+    border-style: none;
+    padding: 0;
+
+    -fx-background: #1e2124;
+    -fx-border-color: #1e2124;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
+.settings-label 
+{
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px, 0px;
+
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 5px 0;
+}
+
+.keybind-box 
+{
+    border-color: #5865F2;
+    border-width: 1.5px;
+    background-color: #2b2d31;
+    padding: 5px;
+
+    -fx-border-color: #5865F2;
+    -fx-border-width: 1.5px;
+    -fx-background-color: #2b2d31;
+    -fx-padding: 5px;
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+}
+
+.keybind-box > .list-cell
+{
+    font-size: 14px;
+    padding: 5px 10px;
+    background-color: transparent;
+
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+    -fx-background-color: transparent;
+}
+
+.keybind-label 
+{
+    font-size: 14px;
+    padding: 5px 10px;
+    background-color: transparent;
+
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+    -fx-background-color: transparent;
+}
+
+.keybind-button 
+{
+    background-color: #72767d;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 3px;
+
+    -fx-background-color: #72767d;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+}
+
+.keybind-button:disabled 
+{
+    background-color: #5a5d63;
+
+    -fx-background-color: #5a5d63;
+}
+
+
+.keyword-item 
+{
+    background-color: #25282c;
+    padding: 10px;
+    border-color: #333;
+    border-width: 1px;
+
+    -fx-background-color: #25282c;
+    -fx-padding: 10px;
+    -fx-border-color: #333;
+    -fx-border-width: 1px;
+    -fx-pref-width: 100%;
+}
+
+.keyword-item:hover 
+{
+    background-color: #2e3136;
+
+    -fx-background-color: #2e3136;
+}
+
+.keyword-item .keyword-label 
+{
+    font-size: 14px;
+    font-weight: bold;
+
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+.keyword-item .type-label 
+{
+    font-size: 12px;
+
+    -fx-font-size: 12px;
+    -fx-text-fill: #aaaaaa;
+}
+
+.keyword-item .value-label 
+{
+    font-size: 13px;
+
+    -fx-font-size: 13px;
+    -fx-text-fill: #cccccc;
+}
+
+.keyword-item .icon-button 
+{
+    background-color: transparent;
+    padding: 5px;
+
+    -fx-background-color: transparent;
+    -fx-padding: 5px;
+    -fx-background-radius: 4px;
+}
+
+.keyword-item .icon-button:hover 
+{
+    background-color: #3a3d41;
+
+    -fx-background-color: #3a3d41;
+}
+
+.keyword-item .delete-button:hover 
+{
+    background-color: #ff5555;
+
+    -fx-background-color: #ff5555;
+}
+
+#keywords-list 
+{
+    background-color: transparent;
+
+    -fx-background-color: transparent;
+}
+
+#keywords-list .list-cell 
+{
+    background-color: transparent;
+    padding: 2.5px 0px;
+    border-width: 0;
+
+    -fx-background-color: transparent;
+    -fx-padding: 2.5px 0px;
+    -fx-border-width: 0;
+}
+
+#keywords-list .list-cell:filled:selected, 
+#keywords-list .list-cell:filled:selected:hover 
+{
+    background-color: transparent;
+
+    -fx-background-color: transparent;
+    -fx-text-fill: inherit;
+}
+
+#keywords-list .list-cell:hover 
+{
+    background-color: transparent;
+
+    -fx-background-color: transparent;
+}
+
+.error-tooltip 
+{
+    background-color: red;
+    padding: 4px 8px;
+    font-size: 12px;
+
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-padding: 4px 8px;
+    -fx-font-size: 12px;
+    -fx-background-radius: 4px;
+}
