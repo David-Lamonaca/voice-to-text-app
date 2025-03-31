@@ -23,13 +23,24 @@ public class GlobalKeyListener implements NativeKeyListener
     @Override
     public void nativeKeyPressed(NativeKeyEvent e) 
     {
-        String keyString = SettingsManager.getInstance().getSetting("pushToTalkKey");
-        if (keyString != null) 
+        String pttKey = SettingsManager.getInstance().getSetting("pushToTalkKey");
+        if (pttKey != null) 
         {
-            int pushToTalkKey = getKeyCodeFromName(keyString);
+            int pushToTalkKey = getKeyCodeFromName(pttKey);
             if (pushToTalkKey != -1 && e.getKeyCode() == pushToTalkKey) 
             {
                 AudioRecorder.getInstance().setPushToTalkHeld(true);
+                AudioRecorder.getInstance().updateRecordingState();
+            }
+        }
+
+        String keyString = SettingsManager.getInstance().getSetting("keywordActivationKey");
+        if (keyString != null) 
+        {
+            int activationKey = getKeyCodeFromName(keyString);
+            if (activationKey != -1 && e.getKeyCode() == activationKey) 
+            {
+                AudioRecorder.getInstance().setKeywordActivationHeld(true);
             }
         }
 
@@ -42,13 +53,24 @@ public class GlobalKeyListener implements NativeKeyListener
     @Override
     public void nativeKeyReleased(NativeKeyEvent e) 
     {
-        String keyString = SettingsManager.getInstance().getSetting("pushToTalkKey");
-        if (keyString != null) 
+        String pttKey = SettingsManager.getInstance().getSetting("pushToTalkKey");
+        if (pttKey != null) 
         {
-            int pushToTalkKey = getKeyCodeFromName(keyString);
+            int pushToTalkKey = getKeyCodeFromName(pttKey);
             if (pushToTalkKey != -1 && e.getKeyCode() == pushToTalkKey) 
             {
                 AudioRecorder.getInstance().setPushToTalkHeld(false);
+                AudioRecorder.getInstance().updateRecordingState();
+            }
+        }
+
+        String keyString = SettingsManager.getInstance().getSetting("keywordActivationKey");
+        if (keyString != null) 
+        {
+            int activationKey = getKeyCodeFromName(keyString);
+            if (activationKey != -1 && e.getKeyCode() == activationKey) 
+            {
+                AudioRecorder.getInstance().setKeywordActivationHeld(true);
             }
         }
     }
@@ -72,16 +94,15 @@ public class GlobalKeyListener implements NativeKeyListener
     }
 
     private int getKeyCodeFromName(String keyName) 
-{
-    try 
     {
-        return (int) NativeKeyEvent.class.getField("VC_" + keyName.toUpperCase()).get(null);
-    } 
-    catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) 
-    {
-        System.err.println("Invalid key name: " + keyName);
-        return -1; 
+        try 
+        {
+            return (int) NativeKeyEvent.class.getField("VC_" + keyName.toUpperCase()).get(null);
+        } 
+        catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) 
+        {
+            System.err.println("Invalid key name: " + keyName);
+            return -1; 
+        }
     }
-}
-
 }

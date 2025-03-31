@@ -126,7 +126,7 @@ public class SettingsManager
 
     public void addKeyword(String word, KeywordItem values) 
     {
-        settings.keywords.put(word, values);
+        settings.keywords.put(word.toLowerCase(), values);
         saveSettings();
     }
 

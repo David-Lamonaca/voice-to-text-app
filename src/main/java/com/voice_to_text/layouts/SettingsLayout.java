@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import com.voice_to_text.AudioRecorder;
 import com.voice_to_text.KeywordItem;
 import com.voice_to_text.components.IconButton;
 import com.voice_to_text.components.KeybindControl;
@@ -49,6 +50,7 @@ public class SettingsLayout extends VBox
         inputModeDropdown.setOnAction(e -> 
         {
             SettingsManager.getInstance().updateSetting("inputMode", inputModeDropdown.getValue());
+            AudioRecorder.getInstance().updateRecordingState();
         });
 
         // **Keybind Controls**

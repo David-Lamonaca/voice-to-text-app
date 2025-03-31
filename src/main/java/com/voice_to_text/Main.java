@@ -2,6 +2,7 @@ package com.voice_to_text;
 
 import com.voice_to_text.listeners.ActiveWindowTracker;
 import com.voice_to_text.listeners.GlobalKeyListener;
+import com.voice_to_text.managers.KeywordManager;
 import com.voice_to_text.managers.SceneManager;
 
 import javafx.application.Application;
@@ -51,16 +52,25 @@ public class Main extends Application
                         e.printStackTrace();
                     }
 
-                    textFieldInteractor.typeText(transcribedText);
-                    if (!transcribedText.equals(lastRecognizedText)) 
+                    if (audioRecorder.isKeywordActivationHeld()) 
                     {
-                        lastRecognizedText = transcribedText;
+                        KeywordManager.getInstance().executeKeyword(transcribedText);
+                        System.out.println("isKeywordActivationHeld(): " + transcribedText);
+                    }
+                    else
+                    {
+                        System.out.println(transcribedText);
+                        textFieldInteractor.typeText(transcribedText);
+                        if (!transcribedText.equals(lastRecognizedText)) 
+                        {
+                            lastRecognizedText = transcribedText;
+                        }
                     }
                 });
                 speechToText.resetRecognizer();
             }
         });
-
+        audioRecorder.updateRecordingState();
     }
 
     private void startActiveWindowMonitor() 
