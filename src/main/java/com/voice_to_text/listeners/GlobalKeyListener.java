@@ -44,10 +44,10 @@ public class GlobalKeyListener implements NativeKeyListener
             }
         }
 
-        if (e.getKeyCode() == NativeKeyEvent.VC_ENTER) 
+/*         if (e.getKeyCode() == NativeKeyEvent.VC_ENTER) 
         {
             mainApp.resetTypedText();
-        }
+        } */
     }
 
     @Override
@@ -70,7 +70,7 @@ public class GlobalKeyListener implements NativeKeyListener
             int activationKey = getKeyCodeFromName(keyString);
             if (activationKey != -1 && e.getKeyCode() == activationKey) 
             {
-                AudioRecorder.getInstance().setKeywordActivationHeld(true);
+                AudioRecorder.getInstance().setKeywordActivationHeld(false);
             }
         }
     }

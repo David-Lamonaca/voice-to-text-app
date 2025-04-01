@@ -12,6 +12,7 @@ import com.voice_to_text.components.KeybindControl;
 import com.voice_to_text.managers.SceneManager;
 import com.voice_to_text.managers.SettingsManager;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -22,6 +23,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -241,6 +244,32 @@ public class SettingsLayout extends VBox
 
         Button editKeyButton = new Button("Edit Keybind");
         editKeyButton.getStyleClass().add("keybind-button");
+        editKeyButton.setOnAction(e -> 
+        {
+            editKeyButton.setText("Press any key...");
+
+            // Create a key event handler
+            EventHandler<KeyEvent> keyListener = new EventHandler<>() 
+            {
+                @Override
+                public void handle(KeyEvent event) 
+                {
+                    if (event.getCode() != KeyCode.ESCAPE) 
+                    {
+                        // User selects a new key
+                        String newKey = event.getCode().toString();
+                        keyPressField.setText(newKey);
+                    }
+
+                    // Restore button text and remove event handler
+                    editKeyButton.setText("Edit Keybind");
+                    editKeyButton.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
+                }
+            };
+
+            // Add the event handler to listen for key presses
+            editKeyButton.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyListener);
+        });
 
         HBox.setHgrow(keyPressField, Priority.ALWAYS);
         keyPressField.setMaxWidth(Double.MAX_VALUE);
