@@ -26,7 +26,7 @@ public class Main extends Application
         primaryStage.show();
 
         // Initialize components
-        String modelPath = "C:\\_Programming_Stuff\\_desktopApps\\voice-to-text-app\\vosk-model-small-en-us-0.15";
+        String modelPath = "C:\\_Programming_Stuff\\_desktopApps\\voice-to-text-app\\vosk-model";
         speechToText = new SpeechToText(modelPath);
         audioRecorder = AudioRecorder.getInstance();
         textFieldInteractor = new TextFieldInteractor();

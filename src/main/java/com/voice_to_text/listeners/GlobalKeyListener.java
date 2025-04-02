@@ -44,7 +44,7 @@ public class GlobalKeyListener implements NativeKeyListener
             }
         }
 
-/*         if (e.getKeyCode() == NativeKeyEvent.VC_ENTER) 
+    /*  if (e.getKeyCode() == NativeKeyEvent.VC_ENTER) 
         {
             mainApp.resetTypedText();
         } */

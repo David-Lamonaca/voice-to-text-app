@@ -40,5 +40,6 @@ replay_pid*
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
+.target/*
 .history
 .ionide
