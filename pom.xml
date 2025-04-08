@@ -10,29 +10,38 @@
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
+        <javafx.version>21.0.6</javafx.version>
+        <vosk.model.path>${project.basedir}/vosk-model</vosk.model.path>
     </properties>
 
     <dependencies>
+        <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>21.0.6</version>
+            <version>${javafx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>21.0.6</version>
+            <version>${javafx.version}</version>
         </dependency>
+
+        <!-- Vosk -->
         <dependency>
             <groupId>com.alphacephei</groupId>
             <artifactId>vosk</artifactId>
             <version>0.3.45</version>
         </dependency>
+
+        <!-- GSON -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
+
+        <!-- JNA -->
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
@@ -43,11 +52,15 @@
             <artifactId>jna-platform</artifactId>
             <version>5.12.1</version>
         </dependency>
+
+        <!-- Global Key Listener -->
         <dependency>
             <groupId>com.github.kwhat</groupId>
             <artifactId>jnativehook</artifactId>
             <version>2.2.2</version>
         </dependency>
+
+        <!-- JFoenix -->
         <dependency>
             <groupId>com.jfoenix</groupId>
             <artifactId>jfoenix</artifactId>
@@ -56,7 +69,14 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
         <plugins>
+            <!-- Java Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -66,47 +86,48 @@
                 </configuration>
             </plugin>
 
+            <!-- Shade Plugin for fat JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.voice_to_text.Main</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.panteleyev</groupId>
-                <artifactId>jpackage-maven-plugin</artifactId>
-                <version>1.6.0</version>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
-                        <goals>
-                            <goal>jpackage</goal>  <!-- Fixed incorrect goal -->
-                        </goals>
+                        <phase>package</phase>
+                        <goals><goal>shade</goal></goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.voice_to_text.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <name>VoiceControl</name>
-                    <mainJar>${project.build.finalName}.jar</mainJar>
-                    <inputDirectory>${project.build.directory}</inputDirectory>
-                    <runtimeImage>${project.build.directory}/jre</runtimeImage>
-                    <destination>${project.build.directory}/installer</destination>
-                    <installDir>C:\VoiceControl</installDir>
-                    <resourceDir>${project.basedir}/vosk-model</resourceDir>
-                    <icon>${project.basedir}/icon.ico</icon>
-                    <winShortcut>true</winShortcut>
-                    <winMenu>true</winMenu>
-                    <additionalOptions>
-                        <option>--input</option>
-                        <option>${project.build.directory}</option>
-                    </additionalOptions>
-                </configuration>
+            </plugin>
 
+            <!-- Ant plugin to copy vosk-model to jpackage output -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <!-- Copy to target/vosk-model -->
+                    <execution>
+                        <id>copy-vosk-to-target</id>
+                        <phase>prepare-package</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration>
+                            <target>
+                                <copy todir="${project.build.directory}/vosk-model" overwrite="true">
+                                    <fileset dir="${vosk.model.path}" />
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                    
+                </executions>
             </plugin>
         </plugins>
     </build>

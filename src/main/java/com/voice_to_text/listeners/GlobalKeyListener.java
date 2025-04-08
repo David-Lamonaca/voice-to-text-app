@@ -1,7 +1,6 @@
 package com.voice_to_text.listeners;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.IOException;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
@@ -13,11 +12,8 @@ import com.voice_to_text.managers.SettingsManager;
 
 public class GlobalKeyListener implements NativeKeyListener 
 {
-    private final Main mainApp;
-
-    public GlobalKeyListener(Main mainApp) 
+    public GlobalKeyListener() 
     {
-        this.mainApp = mainApp;
     }
 
     @Override
@@ -31,6 +27,7 @@ public class GlobalKeyListener implements NativeKeyListener
             {
                 AudioRecorder.getInstance().setPushToTalkHeld(true);
                 AudioRecorder.getInstance().updateRecordingState();
+                return;
             }
         }
 
@@ -43,11 +40,6 @@ public class GlobalKeyListener implements NativeKeyListener
                 AudioRecorder.getInstance().setKeywordActivationHeld(true);
             }
         }
-
-    /*  if (e.getKeyCode() == NativeKeyEvent.VC_ENTER) 
-        {
-            mainApp.resetTypedText();
-        } */
     }
 
     @Override
@@ -61,6 +53,7 @@ public class GlobalKeyListener implements NativeKeyListener
             {
                 AudioRecorder.getInstance().setPushToTalkHeld(false);
                 AudioRecorder.getInstance().updateRecordingState();
+                return;
             }
         }
 
@@ -78,16 +71,17 @@ public class GlobalKeyListener implements NativeKeyListener
     @Override
     public void nativeKeyTyped(NativeKeyEvent e) {}
 
-    public static void register(Main mainApp) 
+    public static void register()
     {
         try 
         {
-            Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-            logger.setLevel(Level.OFF); 
+            System.setProperty("jnativehook.lib.name", "JNativeHook");
+            System.setProperty("jnativehook.lib.path", getNativeLibDir());
+            
             GlobalScreen.registerNativeHook();
-            GlobalScreen.addNativeKeyListener(new GlobalKeyListener(mainApp));
+            GlobalScreen.addNativeKeyListener(new GlobalKeyListener());
         } 
-        catch (NativeHookException | SecurityException e) 
+        catch (SecurityException | NativeHookException e) 
         {
             e.printStackTrace();
         }
@@ -105,4 +99,25 @@ public class GlobalKeyListener implements NativeKeyListener
             return -1; 
         }
     }
+
+    private static String getNativeLibDir() 
+    {
+        // Create a writable temp folder in AppData
+        String tmpPath = System.getProperty("user.home") + "/.voicecontrol/native/";
+        java.io.File nativeDir = new java.io.File(tmpPath);
+        nativeDir.mkdirs();
+
+        // Copy the DLL from resources into that folder
+        try (java.io.InputStream in = Main.class.getResourceAsStream("JNativeHook.dll")) 
+        {
+            java.nio.file.Path outPath = java.nio.file.Paths.get(tmpPath + "JNativeHook.dll");
+            java.nio.file.Files.copy(in, outPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } 
+        catch (NullPointerException | IOException e) 
+        {
+        }
+
+        return tmpPath;
+    }
+
 }

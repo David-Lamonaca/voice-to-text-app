@@ -1,5 +1,8 @@
 package com.voice_to_text;
 
+
+import java.nio.file.Path;
+
 import com.voice_to_text.listeners.ActiveWindowTracker;
 import com.voice_to_text.listeners.GlobalKeyListener;
 import com.voice_to_text.managers.KeywordManager;
@@ -17,7 +20,7 @@ public class Main extends Application
     private String lastRecognizedText = "";
 
     @Override
-    public void start(Stage primaryStage) 
+    public void start(Stage primaryStage)
     {
         SceneManager.getInstance().init(primaryStage);
         SceneManager.getInstance().loadMainApp();
@@ -26,14 +29,17 @@ public class Main extends Application
         primaryStage.show();
 
         // Initialize components
-        String modelPath = "C:\\_Programming_Stuff\\_desktopApps\\voice-to-text-app\\vosk-model";
-        speechToText = new SpeechToText(modelPath);
+        //Path modelPathDev = Path.of(System.getProperty("user.dir"), "vosk-model");
+        Path modelPathProd = Path.of(System.getProperty("user.dir"), "app/vosk-model");
+
+        speechToText = new SpeechToText(modelPathProd.toString());
         audioRecorder = AudioRecorder.getInstance();
         textFieldInteractor = new TextFieldInteractor();
 
         // Detect when window loses focus, and a certain key is pressed.
         startActiveWindowMonitor();
-        GlobalKeyListener.register(this);
+        GlobalKeyListener.register();
+        KeySuppressor.startGlobalHook();
 
         // Audio data listener
         audioRecorder.setAudioDataListener(audioData -> 
@@ -55,11 +61,9 @@ public class Main extends Application
                     if (audioRecorder.isKeywordActivationHeld()) 
                     {
                         KeywordManager.getInstance().executeKeyword(transcribedText);
-                        System.out.println("isKeywordActivationHeld(): " + transcribedText);
                     }
                     else
                     {
-                        System.out.println(transcribedText);
                         textFieldInteractor.typeText(transcribedText);
                         if (!transcribedText.equals(lastRecognizedText)) 
                         {

@@ -1,12 +1,13 @@
 package com.voice_to_text.managers;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,19 +21,17 @@ import javafx.beans.property.StringProperty;
 
 public class SettingsManager 
 {
-    private static final String SETTINGS_FILE = "settings.json";
+    private static final Path SETTINGS_FILE = Paths.get(System.getProperty("user.home"), ".voicecontrol", "settings.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     
     private static SettingsManager instance;
     private Settings settings;
 
-    // Private constructor to prevent instantiation
     private SettingsManager() 
     {
         loadSettings();
     }
 
-    // Singleton instance getter
     public static synchronized SettingsManager getInstance() 
     {
         if (instance == null) 
@@ -46,7 +45,7 @@ public class SettingsManager
     public static class Settings 
     {
         private String inputMode = "Voice Activity";
-        private String pushToTalkKey = "CTRL";
+        private String pushToTalkKey = "CONTROL";
         private String keywordActivationKey = "SHIFT";
         private final Map<String, KeywordItem> keywords = new HashMap<>();
 
@@ -59,7 +58,7 @@ public class SettingsManager
 
     private void loadSettings() 
     {
-        try (Reader reader = new FileReader(SETTINGS_FILE)) 
+        try (Reader reader = Files.newBufferedReader(SETTINGS_FILE)) 
         {
             Type settingsType = new TypeToken<Settings>() {}.getType();
             settings = GSON.fromJson(reader, settingsType);
@@ -71,15 +70,20 @@ public class SettingsManager
         } 
         catch (IOException e) 
         {
-            e.printStackTrace();
+            settings = new Settings();
+            saveSettings();
         }
     }
 
     public void saveSettings() 
     {
-        try (Writer writer = new FileWriter(SETTINGS_FILE)) 
+        try 
         {
-            GSON.toJson(settings, writer);
+            Files.createDirectories(SETTINGS_FILE.getParent());
+            try (Writer writer = Files.newBufferedWriter(SETTINGS_FILE)) 
+            {
+                GSON.toJson(settings, writer);
+            }
         } 
         catch (IOException e) 
         {

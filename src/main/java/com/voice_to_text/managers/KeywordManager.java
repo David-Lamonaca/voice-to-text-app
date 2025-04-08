@@ -43,12 +43,7 @@ public class KeywordManager
         KeywordStrategy strategy = strategyMap.get(keywordItem.getType());
         if (strategy != null) 
         {
-            System.out.println("executeKeyword() " + spokenText);
             strategy.execute(keywordItem.getValue());
         } 
-        else 
-        {
-            System.out.println("Unknown keyword type: " + keywordItem.getType());
-        }
     }
 }
