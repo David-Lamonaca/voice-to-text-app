@@ -1,5 +1,6 @@
 package com.voice_to_text.components;
 
+import com.voice_to_text.KeySuppressor;
 import com.voice_to_text.managers.SettingsManager;
 
 import javafx.event.EventHandler;
@@ -64,6 +65,8 @@ public class KeybindControl extends VBox
                         String newKey = event.getCode().toString();
                         SettingsManager.getInstance().updateSetting(settingKey, newKey);
                         keyLabel.setText(newKey);
+
+                        KeySuppressor.restartGlobalHook();
                     }
 
                     // Restore button text and remove event handler

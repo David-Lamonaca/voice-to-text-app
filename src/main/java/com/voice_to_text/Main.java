@@ -29,16 +29,19 @@ public class Main extends Application
         primaryStage.show();
 
         // Initialize components
-        //Path modelPathDev = Path.of(System.getProperty("user.dir"), "vosk-model");
-        Path modelPathProd = Path.of(System.getProperty("user.dir"), "app/vosk-model");
+        Path modelPathDev = Path.of(System.getProperty("user.dir"), "vosk-model");
+        //Path modelPathProd = Path.of(System.getProperty("user.dir"), "app/vosk-model");
 
-        speechToText = new SpeechToText(modelPathProd.toString());
+        speechToText = new SpeechToText(modelPathDev.toString());
         audioRecorder = AudioRecorder.getInstance();
         textFieldInteractor = new TextFieldInteractor();
 
         // Detect when window loses focus, and a certain key is pressed.
         startActiveWindowMonitor();
         GlobalKeyListener.register();
+
+        System.setProperty("jna.nosys", "true");
+        System.setProperty("jna.tmpdir", "bin");
         KeySuppressor.startGlobalHook();
 
         // Audio data listener
@@ -51,7 +54,7 @@ public class Main extends Application
                 {
                     try 
                     {
-                        Thread.sleep(500);
+                        Thread.sleep(100);
                     } 
                     catch (InterruptedException e) 
                     {

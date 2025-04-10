@@ -1,6 +1,7 @@
 package com.voice_to_text.components;
 
 import com.jfoenix.controls.JFXButton;
+import com.voice_to_text.KeySuppressor;
 import com.voice_to_text.managers.SceneManager;
 
 import javafx.application.Platform;
@@ -24,7 +25,12 @@ public class TitleBar extends HBox
         JFXButton homeButton = new IconButton("/icons/home.png", 30, 30, () -> { SceneManager.getInstance().loadMainApp(); });
         JFXButton settingsButton = new IconButton("/icons/settings.png", 30, 30, () -> { SceneManager.getInstance().loadSettingsPage(); });
         JFXButton minimizeButton = new IconButton("/icons/minimize.png", 30, 30, () -> primaryStage.setIconified(true));
-        JFXButton closeButton = new IconButton("/icons/close.png", 30, 30, () -> { Platform.exit(); System.exit(0); });
+        JFXButton closeButton = new IconButton("/icons/close.png", 30, 30, () -> 
+        {  
+            KeySuppressor.stopGlobalHook();
+            Platform.exit(); 
+            System.exit(0); 
+        });
 
         // Invisible spacer to push items to the right
         Region spacer = new Region();
