@@ -29,10 +29,10 @@ public class Main extends Application
         primaryStage.show();
 
         // Initialize components
-        Path modelPathDev = Path.of(System.getProperty("user.dir"), "vosk-model");
-        //Path modelPathProd = Path.of(System.getProperty("user.dir"), "app/vosk-model");
+        //Path modelPathDev = Path.of(System.getProperty("user.dir"), "vosk-model");
+        Path modelPathProd = Path.of(System.getProperty("user.dir"), "app/vosk-model");
 
-        speechToText = new SpeechToText(modelPathDev.toString());
+        speechToText = new SpeechToText(modelPathProd.toString());
         audioRecorder = AudioRecorder.getInstance();
         textFieldInteractor = new TextFieldInteractor();
 

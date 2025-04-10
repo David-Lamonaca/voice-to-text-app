@@ -73,11 +73,10 @@ jpackage ^
     --win-shortcut ^
     --win-menu ^
     --win-menu-group "Voice Control" ^
+    --vendor "DLamonaca" ^
     --resource-dir %RESOURCE_DIR% ^
     --dest %INSTALLER_OUTPUT% ^
-    --win-console ^
-    --java-options "-Dprism.order=sw" ^
-    --java-options "-Dprism.verbose=true"
+    --java-options "-Dprism.order=sw" 
 
 if %errorlevel% neq 0 (
     echo [ERROR] JPackage failed.

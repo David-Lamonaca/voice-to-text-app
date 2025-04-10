@@ -2,6 +2,8 @@
 
 A voice-to-text Java desktop application that allows you to control your system using spoken commands. Built with JavaFX and Vosk for offline speech recognition, and supports customization features including push-to-talk keys and keyword-triggered actions.
 
+[Download Installer](https://www.dropbox.com/scl/fi/1t4aibshe9nnj27u0b1xr/VoiceControl_Installer-1.0.0.zip?rlkey=857k6m8tr0yb2y2eic4ypco90&st=ki4w6wu3&dl=0)
+
 ---
 
 ## 🚀 Features
